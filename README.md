@@ -1,51 +1,62 @@
-# CakePHP Application Skeleton
+# practice_php_cakephp_vinhnt_201909
+Bài tập thực hành về CakePHP - Quản lý thư viện - VinhNT - 201909
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
+## Môi trường phát triển
+- PHP 7.3
+- CakePHP 3.7
+- DB MYSQL 5.7 trở lên
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
+## Nội dung
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+### Login	
+	Nhập thông tin user/password để thực hiện đăng nhập
+	Password mã hóa MD5
+### Đăng ký user	
+	Cần validate các trường user là duy nhất, địa chỉ email phải hợp lệ, số điện thoại chỉ được nhập số
+### Lấy lại mật khẩu	
+	Tự động tạo mật khẩu mới rồi gửi mail thông tin mật khẩu
+### Thay đổi thông tin cá nhân	
+	Chỉ được thay đổi thông tin của cá nhân
+### Danh sách user	
+	Chỉ có thủ thư và admin có chức năng này
+### Sửa thông tin cá nhân	
+	Thủ thư có quyền đóng user, thay đổi thông tin số điện thoại, mật khẩu, địa chỉ của user thông thường, không được quyền thay đổi role của user
+	Admin có thể thay đổi thông tin số điện thoại, mật khẩu, địa chỉ, role của tất cả các user, có quyền đóng user
+	
+### Danh sách thể loại sách	
+	Chỉ thủ thư và admin có quyền thực hiện
+### Thêm thể loại sách
+	Chỉ thủ thư và admin có quyền thực hiện
+### Sửa thể loại sách
+	Chỉ thủ thư và admin có quyền thực hiện
+### Xóa thể loại sách	
+	Chỉ thủ thư và admin có quyền thực hiện
+	Trường hợp thể loại sách đang có sách thì không được xóa
+	
+### Danh sách sách	
+	Tất cả mọi user đều có quyền
+### Thêm sách, sửa sách	
+	Chỉ thủ thư và admin có quyền thực hiện
+### Xem nội dung sách	
+	Tất cả mọi user đều có quyền
+	
+	
+### Danh sách mượn sách	
+	Với user thông thường và admin chỉ hiển thị danh sách của chính mình, với thủ thư hiển thị tất cả
+	
+### Mượn sách	
+	Tất cả mọi user đều có quyền mượn sách, tuy nhiên cần kiểm tra sách có còn trong thư viện hay không? 
+	Với mỗi một user thông thường chỉ được mượn 5 quyển, thủ thư 10 quyển, admin 15 quyển
+	Không được mượn 1 quyển sách quá 30 ngày với tất cả user
+	Trường hợp là user thủ thư mượn sách, trạng thái chuyển là đã duyệt và tăng thêm 1 số sách đã mượn , admin và user thông thường là pending và không tăng số sách đã mượn
+### Duyệt mượn sách	
+	Chỉ thủ thư có quyền duyệt sách, có thể thực hiện duyệt hoặc từ chối cho mượn sách, trường hợp duyệt, thì tăng thêm 1 số sách đã mượn.
+	Trước khi duyệt, cần kiểm tra số lượng sách trong dữ liệu sách còn hay không?
+### Trả sách	
+	Chỉ thủ thư có quyền thao tác, khi trả sách cập nhật trạng thái và giảm đi 1 số sách đã mượn
+### Mất sách	
+	Chỉ thủ thư có quyền thao tác, khi báo mất sách cập nhật trạng thái và giảm đi 1 số sách đã mượn, giảm đi 1 số lượng sách
 
-## Installation
-
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
-
-```bash
-composer create-project --prefer-dist cakephp/app
-```
-
-In case you want to use a custom app dir name (e.g. `/myapp/`):
-
-```bash
-composer create-project --prefer-dist cakephp/app myapp
-```
-
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
-
-```bash
-bin/cake server -p 8765
-```
-
-Then visit `http://localhost:8765` to see the welcome page.
-
-## Update
-
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
-
-## Configuration
-
-Read and edit `config/app.php` and setup the `'Datasources'` and any other
-configuration relevant for your application.
-
-## Layout
-
-The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+## Tham khảo
+	Book: https://book.cakephp.org/
+	Coding convention: https://www.php-fig.org/psr/
