@@ -109,6 +109,11 @@
     background-color: #3b5998;
   }
 
+  .link-custom{
+      color: white;
+      text-decoration: none;
+  }
+
   /* Fallback for Edge
   -------------------------------------------------- */
 

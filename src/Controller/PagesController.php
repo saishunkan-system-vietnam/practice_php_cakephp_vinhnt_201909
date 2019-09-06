@@ -59,6 +59,7 @@ class PagesController extends AppController
 
         try {
             $this->render(implode('/', $path));
+            //return $this->redirect(['controller'=>'Tests', 'action'=>'test',$path]);
         } catch (MissingTemplateException $exception) {
             if (Configure::read('debug')) {
                 throw $exception;
