@@ -2,6 +2,11 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
+use App\Model\Entity\User;
+use App\Model\Table\UsersTable;
+use Cake\Controller\Component\AuthComponent;
+
 
 /**
  * Users Controller
@@ -12,95 +17,51 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function index()
-    {
-        $users = $this->paginate($this->Users);
 
-        $this->set(compact('users'));
+    public function beforeFilter(Event $event){
+        parent::beforeFilter($event);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
+        function index(){
+            //$this->redirect("/users/index");
+        }
 
-        $this->set('user', $user);
-    }
+        function login(){
+            $error="";
+            if(isset($_POST['submit'])){
+                $username = $_POST['username'];
+                $password = md5($_POST['password']);
+                if($this->Users->checkLogin($username,$password)){
+                    $this->request->session()->write('sessionUser', $username);
+                    $this->redirect("/home/index");//đăng nhập thành công chuyển trang thông tin
+                }else{
+                    $error = "Tên đăng nhập hoặc mật khẩu không đúng";
+              }
+           }
+           $this->set("error",$error);
+           $this->render('index');
+        }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+        function logout(){
+            $this->redirect($this->Auth->logout());
+        }
 
-                return $this->redirect(['action' => 'index']);
+        function register(){
+            $user = $this->Users->newEntity();
+            if ($this->request->is('post')) {
+                //debug($this->request->getData());
+                $user = $this->Users->patchEntity($user, $this->request->data);
+                //debug($user);
+                if($user->errors()){
+                    $this->set(compact('user'));
+                    $this->render('/Accounts/register');
+                } else{
+                    if($this->Users->save($user))
+                    {
+                        //$this->Auth->login($this->data);
+                        $this->redirect(array('action' => 'index'));
+                    }
+                }
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $this->set(compact('user'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
-        }
-        $this->set(compact('user'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
-        } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
 }

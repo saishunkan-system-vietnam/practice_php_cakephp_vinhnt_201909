@@ -147,7 +147,7 @@ DROP TABLE IF EXISTS `users`;
  SET character_set_client = utf8 ;
 CREATE TABLE `users` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(50) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `mail` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,

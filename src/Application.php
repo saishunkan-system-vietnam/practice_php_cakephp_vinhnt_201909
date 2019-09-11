@@ -21,6 +21,12 @@ use Cake\Http\BaseApplication;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
+// use Authentication\AuthenticationService;
+// use Authentication\AuthenticationServiceProviderInterface;
+// use Authentication\Middleware\AuthenticationMiddleware;
+// use Psr\Http\Message\ResponseInterface;
+// use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * Application setup class.
  *
@@ -36,6 +42,8 @@ class Application extends BaseApplication
     {
         // Call parent to load bootstrap from files.
         parent::bootstrap();
+
+        $this->addPlugin('Authentication');
 
         if (PHP_SAPI === 'cli') {
             $this->bootstrapCli();
@@ -78,6 +86,17 @@ class Application extends BaseApplication
             // `new RoutingMiddleware($this, '_cake_routes_')`
             ->add(new RoutingMiddleware($this));
 
+             // Various other middlewares for error handling, routing etc. added here.
+
+        // Add the authentication middleware
+        // $authentication = new AuthenticationMiddleware($this, [
+        //     'unauthenticatedRedirect' => Router::url('users:login'),
+        //     'queryParam' => 'redirect',
+        // ]);
+
+        // Add the middleware to the middleware queue
+        //$middlewareQueue->add($authentication);
+
         return $middlewareQueue;
     }
 
@@ -96,4 +115,33 @@ class Application extends BaseApplication
 
         // Load more plugins here
     }
+
+    /**
+     * Returns a service provider instance.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @param \Psr\Http\Message\ResponseInterface $response Response
+     * @return \Authentication\AuthenticationServiceInterface
+     */
+    // public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response)
+    // {
+    //     $service = new AuthenticationService();
+
+    //     $fields = [
+    //         'username' => 'username',
+    //         'password' => 'password'
+    //     ];
+
+    //     // Load identifiers
+    //     $service->loadIdentifier('Authentication.Password', compact('fields'));
+
+    //     // Load the authenticators, you want session first
+    //     $service->loadAuthenticator('Authentication.Session');
+    //     $service->loadAuthenticator('Authentication.Form', [
+    //         'fields' => $fields,
+    //         'loginUrl' => '/users/login'
+    //     ]);
+
+    //     return $service;
+    // }
 }

@@ -4,25 +4,26 @@
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center">Sign up</h5>
-            <form class="form-signin">
+            <form class="form-signin" method="post" action="/practice_php_cakephp_vinhnt_201909/users/register">
               <div class="form-label-group">
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                <label for="inputEmail">Email address</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" autofocus>
+                <label for="username">Username</label>
+                <!-- <p><?php if(isset($user)) echo $user[['errors']]['username']['_empty'];?></p> -->
               </div>
 
               <div class="form-label-group">
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password">
                 <label for="inputPassword">Password</label>
               </div>
 
               <div class="form-label-group">
-                <input type="text" id="address" class="form-control" placeholder="Password" required>
+                <input type="text" id="address" name="address" class="form-control" placeholder="Address">
                 <label for="address">Address</label>
               </div>
 
               <div class="form-label-group">
-                <input type="text" id="name" class="form-control" placeholder="Password" required>
-                <label for="name">Name</label>
+                <input type="text" id="phone" name="phone" class="form-control" placeholder="Phone">
+                <label for="phone">Phone</label>
               </div>
 
 

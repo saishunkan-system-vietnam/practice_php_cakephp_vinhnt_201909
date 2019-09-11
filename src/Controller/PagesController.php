@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
+use App\Model\Entity\User;
 
 /**
  * Static content controller
@@ -58,8 +59,9 @@ class PagesController extends AppController
         $this->set(compact('page', 'subpage'));
 
         try {
-            $this->render(implode('/', $path));
-            //return $this->redirect(['controller'=>'Tests', 'action'=>'test',$path]);
+            //$this->render(implode('/', $path));
+            //$this->render('/Home/index');
+            $this->redirect(['controller'=>'Users', 'action'=>'index']);
         } catch (MissingTemplateException $exception) {
             if (Configure::read('debug')) {
                 throw $exception;
