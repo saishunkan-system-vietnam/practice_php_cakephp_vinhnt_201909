@@ -59,9 +59,7 @@ class PagesController extends AppController
         $this->set(compact('page', 'subpage'));
 
         try {
-            //$this->render(implode('/', $path));
-            //$this->render('/Home/index');
-            $this->redirect(['controller'=>'Users', 'action'=>'index']);
+            $this->render('/Users/index');
         } catch (MissingTemplateException $exception) {
             if (Configure::read('debug')) {
                 throw $exception;

@@ -8,13 +8,31 @@ use Cake\Validation\Validator;
 class UsersTable extends Table
 {
 
-    public function validationDefault(Validator $validator)
-    {
-         $validator
-            ->notEmpty('username', 'Tên người dùng là bắt buộc')
-            ->notEmpty('password', 'Mật khẩu không được để trống');
-        return $validator;
+    function valid1(){
+        $this->validate = array(
+           "username" => array(
+                "rule" => "notBlank",
+                "message" => "UserName not empty !",
+            ),
+            "password" => array(
+                "rule" => "notBlank", // tập luật là không rỗng
+                "message" => "Password not empty !", // thông báo khi có lỗi
+             ),
+
+         );
+      if($this->validates($this->validate)) // nếu dữ liệu đã được validate (hợp lệ)
+        return TRUE;
+      else
+        return FALSE;
     }
+
+    // public function validationDefault(Validator $validator)
+    // {
+    //      $validator
+    //         ->notEmpty('username', 'Tên người dùng là bắt buộc')
+    //         ->notEmpty('password', 'Mật khẩu không được để trống');
+    //     return $validator;
+    // }
 
     // public function findAuth(\Cake\ORM\Query $query, array $options)
     // {

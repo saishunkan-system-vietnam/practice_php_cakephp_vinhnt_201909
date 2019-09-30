@@ -17,15 +17,6 @@ use Cake\Controller\Component\AuthComponent;
  */
 class UsersController extends AppController
 {
-
-    public function beforeFilter(Event $event){
-        parent::beforeFilter($event);
-    }
-
-        function index(){
-            //$this->redirect("/users/index");
-        }
-
         function login(){
             $error="";
             if(isset($_POST['submit'])){
@@ -47,21 +38,19 @@ class UsersController extends AppController
         }
 
         function register(){
-            $user = $this->Users->newEntity();
-            if ($this->request->is('post')) {
-                //debug($this->request->getData());
-                $user = $this->Users->patchEntity($user, $this->request->data);
-                //debug($user);
-                if($user->errors()){
-                    $this->set(compact('user'));
-                    $this->render('/Accounts/register');
-                } else{
-                    if($this->Users->save($user))
-                    {
-                        //$this->Auth->login($this->data);
-                        $this->redirect(array('action' => 'index'));
-                    }
-                }
-            }
+            // $user = $this->Users->newEntity();
+            // if ($this->request->is('post')) {
+            //     $user = $this->Users->patchEntity($user, $this->request->data);
+            //     if($user->errors()){
+            //         $this->set(compact('user'));
+            //         $this->render('/Accounts/register');
+            //     } else{
+            //         if($this->Users->save($user))
+            //         {
+            //             $this->redirect(array('action' => 'index'));
+            //         }
+            //     }
+            // }
+
         }
 }
