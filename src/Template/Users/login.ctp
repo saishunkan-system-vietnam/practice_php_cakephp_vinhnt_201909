@@ -19,7 +19,6 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
-debug($this->request);
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,7 +43,7 @@ debug($this->request);
           <div class="card-body">
             <h5 class="card-title text-center">Sign In</h5>
             <p><?php if(isset($error) && !empty($error)) echo $error; ?></p>
-            <form name="Form" class="form-signin" method="POST" action="/practice_php_cakephp_vinhnt_201909/users/login">
+            <form name="Form" class="form-signin" method="POST" action="/users/login">
               <div class="form-label-group">
                 <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
                 <label for="username">Username</label>
@@ -71,7 +70,7 @@ debug($this->request);
                 <input type="checkbox" class="custom-control-input" id="customCheck1">
                 <label class="custom-control-label" for="customCheck1">Remember password</label>
               </div> -->
-              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" name="submit">Sign in</button>
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
               <hr class="my-4">
               <button class="btn btn-lg btn-google btn-block" type="button">
                 <i class="fab fa-google mr-2"></i><?php

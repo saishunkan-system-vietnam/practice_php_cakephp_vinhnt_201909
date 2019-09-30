@@ -1,24 +1,22 @@
 <?php
 // src/Model/Entity/User.php
 namespace App\Model\Entity;
-use Cake\Utility\Security;
 use Cake\ORM\Entity;
 
-class User extends Entity
-{
+class User extends Entity {
 
     // Make all fields mass assignable except for primary key field "id".
     protected $_accessible = [
         '*' => true,
-        'id' => false
+        'id' => false,
     ];
 
+    // Add this method
+    protected function _setPassword($value) {
+        if (strlen($value)) {
+            $hasher = new DefaultPasswordHasher();
 
-    protected function _setPassword($password)
-    {
-        if (strlen($password) > 0) {
-            //return (new DefaultPasswordHasher)->hash($password);
-            return Security::hash($password, 'md5', false);
+            return $hasher->hash($value);
         }
     }
 }

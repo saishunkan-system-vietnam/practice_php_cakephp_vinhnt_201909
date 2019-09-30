@@ -14,18 +14,18 @@
  */
 namespace App;
 
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-
-// use Authentication\AuthenticationService;
-// use Authentication\AuthenticationServiceProviderInterface;
-// use Authentication\Middleware\AuthenticationMiddleware;
-// use Psr\Http\Message\ResponseInterface;
-// use Psr\Http\Message\ServerRequestInterface;
+use Cake\Routing\Router;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Application setup class.
@@ -33,13 +33,11 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
  */
-class Application extends BaseApplication
-{
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface {
     /**
      * {@inheritDoc}
      */
-    public function bootstrap()
-    {
+    public function bootstrap() {
         // Call parent to load bootstrap from files.
         parent::bootstrap();
 
@@ -66,36 +64,36 @@ class Application extends BaseApplication
      * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to setup.
      * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
      */
-    public function middleware($middlewareQueue)
-    {
+    public function middleware($middlewareQueue) {
         $middlewareQueue
-            // Catch any exceptions in the lower layers,
-            // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
+        // Catch any exceptions in the lower layers,
+        // and make an error page/response
+        ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
 
-            // Handle plugin/theme assets like CakePHP normally does.
+        // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
-                'cacheTime' => Configure::read('Asset.cacheTime')
+                'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
-            // Add routing middleware.
-            // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance. For that when
-            // creating the middleware instance specify the cache config name by
-            // using it's second constructor argument:
-            // `new RoutingMiddleware($this, '_cake_routes_')`
+        // Add routing middleware.
+        // If you have a large number of routes connected, turning on routes
+        // caching in production could improve performance. For that when
+        // creating the middleware instance specify the cache config name by
+        // using it's second constructor argument:
+        // `new RoutingMiddleware($this, '_cake_routes_')`
             ->add(new RoutingMiddleware($this));
 
-             // Various other middlewares for error handling, routing etc. added here.
+        // Various other middlewares for error handling, routing etc. added here.
 
         // Add the authentication middleware
-        // $authentication = new AuthenticationMiddleware($this, [
-        //     'unauthenticatedRedirect' => Router::url('users:login'),
-        //     'queryParam' => 'redirect',
-        // ]);
-
-        // Add the middleware to the middleware queue
-        //$middlewareQueue->add($authentication);
+        $authentication = new AuthenticationMiddleware($this, [
+            'unauthenticatedRedirect' => Router::url(['controller' => 'Users', 'action' => 'login']),
+            'logoutRedirect' => Router::url(['controller' => 'Users', 'action' => 'login']),
+            'queryParam' => 'redirect',
+        ]);
+        print(Router::url(['controller' => 'Users', 'action' => 'login']));
+        // Add authentication
+        $middlewareQueue->add($authentication);
 
         return $middlewareQueue;
     }
@@ -103,8 +101,7 @@ class Application extends BaseApplication
     /**
      * @return void
      */
-    protected function bootstrapCli()
-    {
+    protected function _bootstrapCli() {
         try {
             $this->addPlugin('Bake');
         } catch (MissingPluginException $e) {
@@ -123,25 +120,43 @@ class Application extends BaseApplication
      * @param \Psr\Http\Message\ResponseInterface $response Response
      * @return \Authentication\AuthenticationServiceInterface
      */
-    // public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response)
-    // {
-    //     $service = new AuthenticationService();
+    public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response) {
+        $service = new AuthenticationService();
 
-    //     $fields = [
-    //         'username' => 'username',
-    //         'password' => 'password'
-    //     ];
+        $fields = [
+            'username' => 'username',
+            'password' => 'password',
+        ];
 
-    //     // Load identifiers
-    //     $service->loadIdentifier('Authentication.Password', compact('fields'));
+        // Load identifiers
+        // $service->loadIdentifier('Authentication.Password', compact('fields'));
+        $service->loadIdentifier('Authentication.password', [
+            'fields' => [
+                'username' => 'username',
+                'password' => 'password',
+            ],
+            'resolver' => [
+                'className' => 'Authentication.Orm'
+            ],
+            'passwordHasher' => [
+                'className' => 'Authentication.Fallback',
+                'hashers' => [
+                    'Authentication.Default',
+                    [
+                        'className' => 'Authentication.Legacy',
+                        'hashType' => 'md5'
+                    ],
+                ]
+            ]
+        ]);
 
-    //     // Load the authenticators, you want session first
-    //     $service->loadAuthenticator('Authentication.Session');
-    //     $service->loadAuthenticator('Authentication.Form', [
-    //         'fields' => $fields,
-    //         'loginUrl' => '/users/login'
-    //     ]);
+        // Load the authenticators, you want session first
+        $service->loadAuthenticator('Authentication.Session');
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => $fields,
+            'loginUrl' => '/users/login',
+        ]);
 
-    //     return $service;
-    // }
+        return $service;
+    }
 }
