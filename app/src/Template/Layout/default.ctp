@@ -241,15 +241,23 @@ $username = $sessionUser->username;
     </nav>
     <div class="content-wrapper">
         <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/app/books">Home</a>
+                </li>
+                <li class="breadcrumb-item active"><?= isset($controller)? $controller:''?></li>
+                <li class="breadcrumb-item active"><?= isset($action)? $action:''?></li>
+            </ol>
             <?=$this->fetch('content'); ?>
         </div>
     </div>
     <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © Your Website 2019</small>
+        <div class="container">
+            <div class="text-center">
+                <small>Copyright © Your Website 2019</small>
+            </div>
         </div>
-      </div>
     </footer>
 </body>
 <?=$this->Html->script('jquery.min.js'); ?>

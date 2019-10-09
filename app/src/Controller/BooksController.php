@@ -23,11 +23,23 @@ class BooksController extends AppController
         ]
     ];
 
+        /**
+     * Initialization hook method.
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->set("controller","Books");
+    }
+
     /**
      * List books with pagination
      */
     public function index()
     {
+        $this->set("action","List book");
         $listBooks = $this->Books->find('all');
         $this->set('listBooks', $this->paginate("Books"));
         $this->render('index');
@@ -38,8 +50,7 @@ class BooksController extends AppController
      */
     public function add()
     {
-        $listBooks = $this->Books->find('all');
-        $this->set('listBooks', $this->paginate("Books"));
-        $this->render('index');
+        $this->set("action","Add Books");
+        $this->render('add');
     }
 }
