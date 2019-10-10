@@ -53,4 +53,26 @@ class BooksController extends AppController
         $this->set("action","Add Books");
         $this->render('add');
     }
+
+    public function search() {
+        $conditions = array();
+
+        // if (isset($this->request->query['title'])) {
+        //     $conditions['Books.title'] = $this->request->query['title'];
+        // }
+
+        if (isset($this->request->query['author'])) {
+            $conditions['Books.author'] = $this->request->query['author'];
+        }
+
+        // if (isset($this->request->query['year'])) {
+        //     $conditions['Books.year'] = $this->request->query['year'];
+        // }
+
+        $listBooks = $this->Books->find('all', array(
+            'conditions' => $conditions
+        ));
+        $this->set('listBooks', $this->paginate($listBooks));
+        $this->render("index");
+     }
 }

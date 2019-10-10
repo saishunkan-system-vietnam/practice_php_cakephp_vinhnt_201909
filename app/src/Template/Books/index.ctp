@@ -10,6 +10,35 @@
             </div>
         </div>
     </div>
+    <div class="row mt-3">
+        <div class="col-md-11 mx-auto" style="border: 1px solid #dee2e6; padding:1rem; background: #CDDADA">
+            <form method="GET" action="/app/books/search">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <input type="text" name="title" class="form-control" placeholder="Title...">
+                    </div>
+                    <div class="col-md">
+                        <input type="text" name="author" class="form-control" placeholder="Author...">
+                    </div>
+                    <div class="col-md">
+                        <input type="text" name="year" class="form-control" placeholder="Year...">
+                    </div>
+                    <div class="col-md">
+                        <select class="form-control" name="category">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="submit" name="search" class="form-control" value="Search">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -57,6 +86,7 @@
                 </tbody>
             </table>
         </div>
+        <?php if($this->Paginator->counter('{{pages}}') > 1):?>
         <div class="pagination">
             <!-- Pagination urls -->
             <?=$this->Paginator->prev(); ?>
@@ -66,6 +96,7 @@
         <!-- Pagination statics -->
         <?=$this->Paginator->counter('Page {{page}} of {{pages}}, showing {{current}} records out of
             {{count}} total, starting on record {{start}}, ending on {{end}}'); ?>
+        <?php endif;?>
     </div>
     <div class="card-footer small text-muted">&nbsp;</div>
 </div>
