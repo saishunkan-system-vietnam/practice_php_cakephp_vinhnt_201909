@@ -6,7 +6,7 @@
                 <i class="fa fa-table"></i> Data Table Book
             </div>
             <div class="col-md-6 text-right">
-                <a href="books/add"><i class="fa fa-plus-square pr-1" aria-hidden="true"></i>Add new</a>
+                <a href="/app/books/add"><i class="fa fa-plus-square pr-1" aria-hidden="true"></i>Add new</a>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
                         <input type="text" name="year" class="form-control" placeholder="Year...">
                     </div>
                     <div class="col-md">
-                        <select class="form-control" name="category">
+                        <select class="form-control" name="id_category">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -73,8 +73,13 @@
                         <td><?=$book->out_stock; ?></td>
                         <td>
                             <a><i class="fa fa-eye" aria-hidden="true"></i></a>
-                            <a><i class="fa fa-edit" aria-hidden="true"></i></a>
-                            <a><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <a href="/app/books/edit/<?= $book->id?>"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <!-- <a><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+                            <?= $this->Form->postLink(
+                                'Delete',
+                                ['action' => 'delete', $book->id],
+                                ['confirm' => 'Are you sure?'])
+                            ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

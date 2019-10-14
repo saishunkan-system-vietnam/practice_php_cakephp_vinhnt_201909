@@ -249,6 +249,14 @@ $username = $sessionUser->username;
                 <li class="breadcrumb-item active"><?= isset($controller)? $controller:''?></li>
                 <li class="breadcrumb-item active"><?= isset($action)? $action:''?></li>
             </ol>
+            <?php $notification = $this->Flash->render();?>
+            <?php if($notification):?>
+            <div class="row">
+                <div class="alert alert-success" role="alert">
+                    <?= $notification;?>
+                </div>
+            </div>
+            <?php endif;?>
             <?=$this->fetch('content'); ?>
         </div>
     </div>

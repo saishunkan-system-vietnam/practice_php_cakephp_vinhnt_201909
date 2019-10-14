@@ -51,7 +51,42 @@ class BooksController extends AppController
     public function add()
     {
         $this->set("action","Add Books");
+        $book = $this->Books->newEntity();
+        if ($this->request->is('post')) {
+            $book = $this->Books->patchEntity($book, $this->request->getData());
+
+            if ($this->Books->save($book)) {
+                $this->Flash->success(__('Your Book has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to add your article.'));
+        }
         $this->render('add');
+    }
+
+    public function edit($id)
+    {
+        $book = $this->Books->findById($id)->firstOrFail();
+        if ($this->request->is(['post', 'put'])) {
+            $this->Books->patchEntity($book, $this->request->getData());
+            if ($this->Books->save($book)) {
+                $this->Flash->success(__('Your book has been updated.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to update your article.'));
+        }
+        // dd($book);
+        $this->set('book', $book);
+    }
+
+    public function delete($id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $book = $this->Books->findById($id)->firstOrFail();
+        if ($this->Books->delete($book)) {
+            $this->Flash->success(__('The {0} article has been deleted.', $book->title));
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     public function search() {
